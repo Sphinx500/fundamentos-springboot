@@ -70,9 +70,22 @@ public class FundamentosApplication implements CommandLineRunner {
 		.stream()
 		.forEach(user ->LOGGER.info("Usuario con el query method"+user));
 
-		LOGGER.info("Usuario encotnrado por el metodo sort"+userRepository.findByEmailAndName("daniela@domain.com","Daniela"))
-				.orElseThrow(()->new RuntimeException("No se encontro el usuario"));
+		LOGGER.info("Usuario encotnrado por el metodo sort"+userRepository.findByEmailAndName("daniela@domain.com","Daniela")
+				.orElseThrow(()->new RuntimeException("No se encontro el usuario")));
 
+		userRepository.findByNameLike("%user%")
+				.stream()
+				.forEach(user -> LOGGER.info("Usuario findByNameLike" + user));
+		userRepository.findByEmailOrName(null,"luis@domain.com")
+				.stream()
+				.forEach(user -> LOGGER.info("Usuario findByEmailOrName" + user));
+
+		userRepository.findByBirthDateBetween(LocalDate.of(2021,3,1),LocalDate.of(2021,4,2))
+				.stream()
+				.forEach(user -> LOGGER.info("Usuario con intervalo de fechas" + user));
+		userRepository.findByNameLikeOrderByIdDesc("%user%")
+				.stream()
+				.forEach(user -> LOGGER.info("Usuario encontrado con like y ordenado" + user));
 	}
 
 	private void saveUsersInDatabase(){
